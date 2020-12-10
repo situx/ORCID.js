@@ -179,16 +179,42 @@ function getJournalTitle(orcidID, journalID, i,outputJSON,elementID) {
         toadd+="<span>"+year+"</span>&nbsp;<span class=\"publication_group_count\">("+publicationsperYear[year].length+")</span></div>"
         for(pub in publicationsperYear[year]){
             toadd+="<div class=\"publication_paper\" id=\"homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019\"><span class=\"publication_paper_titleauthoryear\">"
-            toadd+=publicationsperYear[year][pub]["type"]+"&nbsp;<span class=\"publication_paper_title\"><a href=\"http://doi.org/"+publicationsperYear[year][pub]["doi"]+"\" onclick=\"return trackOutboundLink('publications', 'click', 'homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019', '//bibbase.org/network/publication/homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019');\">"
-            toadd+="<b>"+publicationsperYear[year][pub]["title"]+"</b></a></span>&nbsp;<span class=\"publication_paper_author\">"+publicationsperYear[year][pub]["author"]+"</span>&nbsp;</span>In <i>"+publicationsperYear[year][pub]["journal-title"]+", "+publicationsperYear[year][pub]["address"]+", "+numberToMonth[publicationsperYear[year][pub]["month"]]+" "+year+".</i>&nbsp;"
+            toadd+=publicationsperYear[year][pub]["type"]+"&nbsp;<span class=\"publication_paper_title\">"
+			if("url" in publicationsperYear[year][pub] && (typeof publicationsperYear[year][pub]["url"] !== "undefined") && publicationsperYear[year][pub]["url"]!=""){
+			   toadd+="<a href=\""+publicationsperYear[year][pub]["url"]+"\" onclick=\"return trackOutboundLink('publications', 'click', 'homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019', '//bibbase.org/network/publication/homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019');\"><b>"+publicationsperYear[year][pub]["title"]+"</b></a>"
+			}else if("doi" in publicationsperYear[year][pub]){
+				toadd+="<a href=\"http://doi.org/"+publicationsperYear[year][pub]["doi"]+"\" onclick=\"return trackOutboundLink('publications', 'click', 'homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019', '//bibbase.org/network/publication/homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019');\"><b>"+publicationsperYear[year][pub]["title"]+"</b></a>"			
+			} else{
+				toadd+="<b>"+publicationsperYear[year][pub]["title"]+"</b>"
+			}	
+			toadd+="</span>&nbsp;"
+			if("author" in publicationsperYear[year][pub] && publicationsperYear[year][pub]["author"]!=""){
+			    toadd+="<span class=\"publication_paper_author\">"+publicationsperYear[year][pub]["author"]+"</span>"
+			}				
+			toadd+="&nbsp;</span>"
+			toadd+="In <i>"+publicationsperYear[year][pub]["journal-title"]
+			if("address" in publicationsperYear[year][pub] && publicationsperYear[year][pub]["address"]!=""){
+				toadd+=", "+publicationsperYear[year][pub]["address"]+","
+			}
+			if("month" in publicationsperYear[year][pub] && publicationsperYear[year][pub]["month"]!=""){
+				toadd+=" "+numberToMonth[publicationsperYear[year][pub]["month"]]
+			}
+			toadd+=" "+year+".</i>&nbsp;"
             toadd+="<span class=\"note\"></span><span class=\"bibbase_note\"></span><br class=\"publication_paper_content\"><span class=\"publication_paper_content dontprint\">"
-            if("doi" in publicationsperYear[year][pub]){
+			if("url" in publicationsperYear[year][pub] && (typeof publicationsperYear[year][pub]["url"] !== "undefined") && publicationsperYear[year][pub]["url"]!=""){
+                toadd+="<a href=\""+publicationsperYear[year][pub]["url"]+"\" onclick=\"log_download('homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019', '"+publicationsperYear[year][pub]["url"]+"', event.ctrlKey)\" class=\"bibbase bibtex link\" target=\"_blank\"><span>[x]</span></a>&nbsp;"
+            }
+            if("doi" in publicationsperYear[year][pub] && (typeof publicationsperYear[year][pub]["doi"] !== "undefined") && publicationsperYear[year][pub]["doi"]!=""){
                 toadd+="<a href=\"http://doi.org/"+publicationsperYear[year][pub]["doi"]+"\" onclick=\"log_download('homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019', 'http://doi.org/"+publicationsperYear[year][pub]["doi"]+"', event.ctrlKey)\" class=\"bibbase bibtex link\" target=\"_blank\"><span>doi</span></a>&nbsp;"
             }
             if("bibtex" in publicationsperYear[year][pub]){
-            toadd+="<a href=\"#\" onclick=\"showBib(event); return false;\" class=\"bibbase bibtex link\" style=\"\">bibtex<i class=\"fa fa-caret-down\"></i></a>&nbsp;<a class=\"bibbase_abstract_link bibbase link\" href=\"#\" onclick=\"showAbstract(event); return false;\" style=\"\">abstract <i class=\"fa fa-caret-down\"></i></a> <div class=\"well well-small bibbase\" data-type=\"bibtex\" style=\"display:none\"><pre style=\"white-space: pre-wrap;\" class=\"prettyprint\">"+publicationsperYear[year][pub]["bibtex"]+"</pre></div>"
+				toadd+="<a href=\"#\" onclick=\"showBib(event); return false;\" class=\"bibbase bibtex link\" style=\"\">bibtex<i class=\"fa fa-caret-down\"></i></a>"
+			if("abstract" in publicationsperYear[year][pub] && (typeof publicationsperYear[year][pub]["abstract"] !== "undefined") && publicationsperYear[year][pub]["abstract"]!=""){ 
+				toadd+="&nbsp;<a class=\"bibbase_abstract_link bibbase link\" href=\"#\" onclick=\"showAbstract(event); return false;\" style=\"\">abstract <i class=\"fa fa-caret-down\"></i></a>"
             }
-            if("abstract" in publicationsperYear[year][pub]){ 
+				toadd+="<div class=\"well well-small bibbase\" data-type=\"bibtex\" style=\"display:none\"><pre style=\"white-space: pre-wrap;\" class=\"prettyprint\">"+publicationsperYear[year][pub]["bibtex"]+"</pre></div>"
+			}
+            if("abstract" in publicationsperYear[year][pub] && (typeof publicationsperYear[year][pub]["abstract"] !== "undefined") && publicationsperYear[year][pub]["abstract"]!=""){ 
                 toadd+="<div class=\"well well-small bibbase\" data-type=\"abstract\" style=\"display:none\">"+publicationsperYear[year][pub]["abstract"]+"</div>"
             }
             toadd+="</div>"
@@ -377,10 +403,30 @@ function getFundingInformation(putcode, orcidID, elementID) {
 
           ////DEBUG!
           console.log(data);
-          outputFundingJSON={}
-          if (data["title"] != null) {
+          outputFundingJSON={"title":""}
+          if (data["short-description"] != null && (typeof data["short-description"] !== "undefined")) {
+            var fundingDescription = data["short-description"];
+            outputFundingJSON["description"]=fundingDescription;
+          } else {
+            var fundingDescription = "";
+          }
+		  if (data["url"] != null && (typeof data["url"] !== "undefined")) {
+            var fundingURL = data["url"].value;
+            outputFundingJSON["url"]=fundingURL;
+          } else {
+            var fundingURL = "";
+          }
+		  
+		  if (data["amount"] != null && (typeof data["amount"] !== "undefined")) {
+            var fundingAmount = data["amount"].value+" "+data["amount"]["currency-code"];
+            outputFundingJSON["amount"]=fundingAmount;
+          } else {
+            var fundingAmount = "";
+          }
+		  
+          if (data["title"] != null && (typeof data["title"]["title"].value !== "undefined")) {
             var fundingTitle = data["title"]["title"].value;
-            outputFundingJSON["title"]=fundingTitle;
+			outputFundingJSON["title"]=fundingTitle;
           } else {
             var fundingTitle = "";
           }
@@ -436,9 +482,28 @@ function getFundingInformation(putcode, orcidID, elementID) {
         toadd+="<span>"+year+"</span>&nbsp;<span class=\"publication_group_count\">("+fundingPerYear[year].length+")</span></div>"
         for(pub in fundingPerYear[year]){
             toadd+="<div class=\"publication_paper\" id=\"homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019\"><span class=\"publication_paper_titleauthoryear\">"
-            toadd+=fundingPerYear[year][pub]["type"]+"&nbsp;<span class=\"publication_paper_title\"><a href=\"http://doi.org/"+fundingPerYear[year][pub]["doi"]+"\" onclick=\"return trackOutboundLink('publications', 'click', 'homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019', '//bibbase.org/network/publication/homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019');\">"
-            toadd+="<b>"+fundingPerYear[year][pub]["title"]+"</b></a></span>&nbsp;<span class=\"publication_paper_author\">Awarded By: "+fundingPerYear[year][pub]["organization"]+"</span>&nbsp;</span>"
-            toadd+="From: "+fundingPerYear[year][pub]["fromDate"]+" To: "+fundingPerYear[year][pub]["toDate"]
+            toadd+=fundingPerYear[year][pub]["type"]+"&nbsp;<span class=\"publication_paper_title\">"
+			if("url" in fundingPerYear[year][pub] && fundingPerYear[year][pub]["url"]!=""){
+				toadd+="<a href=\""+fundingPerYear[year][pub]["url"]+"\" onclick=\"return trackOutboundLink('publications', 'click', 'homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019', '//bibbase.org/network/publication/homburg-bhm-bruhn-hubrich-evaluatinglinkeddatalocationbasedservicesusingtheexampleofstolpersteine-2019');\">"
+			}
+			if("title" in fundingPerYear[year][pub] && fundingPerYear[year][pub]["title"]!="" && "description" in fundingPerYear[year][pub] && fundingPerYear[year][pub]["description"]!=""){
+				toadd+="<b>"+fundingPerYear[year][pub]["description"]+"</b>"
+				if("url" in fundingPerYear[year][pub] && fundingPerYear[year][pub]["url"]!=""){
+					toadd+="</a>"
+				}
+				toadd+=" Awarded for: <b>"+fundingPerYear[year][pub]["title"]+"</b></span>&nbsp;"
+			}else if("title" in fundingPerYear[year][pub]){
+			    toadd+="<b>"+fundingPerYear[year][pub]["title"]+"</b>"
+				if("url" in fundingPerYear[year][pub] && fundingPerYear[year][pub]["url"]!=""){
+					toadd+="</a>"
+				}
+				toadd+="</span>&nbsp;"
+			}
+			toadd+="<span class=\"publication_paper_author\">Awarded By: "+fundingPerYear[year][pub]["organization"]+"</span>&nbsp;</span>"
+            toadd+="From: "+fundingPerYear[year][pub]["fromDate"]+" To: "+fundingPerYear[year][pub]["toDate"] 
+			if("amount" in fundingPerYear[year][pub] && fundingPerYear[year][pub]["amount"]!=""){
+				toadd+=" Funding Amount: "+fundingPerYear[year][pub]["amount"]			
+			}
             toadd+="<span class=\"note\"></span><span class=\"bibbase_note\"></span><br class=\"publication_paper_content\"><span class=\"publication_paper_content dontprint\">"
             toadd+="</div>"
         }
